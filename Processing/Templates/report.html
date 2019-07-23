@@ -1,0 +1,43 @@
+{% extends 'blank.html' %}
+{% block body %}
+<table class="table table-bordered">
+    <tr>
+        <th>Loan#</th>
+        <th>File name</th>
+        <th>Line#</th>
+        <th>Audit Items</th>
+        <th>Comments</th>
+        <th>Status</th>
+    </tr>
+    {% for i in fdr %}
+    <tr>
+        <td>{{i.Loan_no}}</td>
+        <td>{{i.Borrower_lname}}</td>
+        <td>{{i.View_no}}</td>
+        <td>{{i.Checklist}}</td>
+        <td>{{i.Proc_comments}}</td>
+        <td>{{i.Proc_status}}</td>
+    </tr>
+    {% endfor %}
+    {% for j in pfdr %}
+    <tr>
+        <td>{{j.Loan_No}}</td>
+        <td>{{j.Borrower_lname}}</td>
+        <td>0</td>
+        <td>None</td>
+        <td>None</td>        
+        <td>{{j.File_status}}</td>
+    </tr>
+    {% endfor %}
+    {% for k in sfdr %}
+    <tr>
+        <td>{{k.Loan_No}}</td>
+        <td>{{k.Borrower_lname}}</td>
+        <td>-</td>
+        <td>-</td>               
+        <td>{{j.File_status}}</td>
+        <td>{{k.File_note}}</td> 
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
