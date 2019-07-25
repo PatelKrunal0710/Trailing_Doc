@@ -36,25 +36,29 @@ def Fileupload(request):
         print(data_set)
         io_string = io.StringIO(data_set)
         print(io_string)
-        next(io_string)        
-        # for column in csv.reader(io_string, delimiter=',', quotechar="|"):
-        #     _, created = Fileinfo.objects.update_or_create(
-        #         Loan_No=column[0],
-        #         Borrower_lname=column[1],
-        #         State=column[2],
-        #         Checklist=column[3],
-        #         Upload_Date = datetime.datetime.now(),
-        #     )
+        next(io_string)
+        for column in csv.reader(io_string, delimiter=',', quotechar="|"):
+            _, created = Fileinfo.objects.update_or_create(
+                Upload_Date = datetime.datetime.now(),
+                Sr_No = column[0],
+                Loan_No =column[1],
+                MM_Loan = column[2],
+                Borrower_lname=column[3],
+                Process_Type = column[4],
+                Checklist=column[5],
+                File_name = csv_file,
+                Priority = column[7],
+            )
         return render(request, "Fileupload.HTML")
     return render(request, "Fileupload.HTML")
 
 
 def Checklist(request):
     lno = Fileinfo.objects.filter(File_process=0).first()
-    # lno.File_process = 2
-    # lno.Proc_userid = str(request.user)
-    # lno.Proc_sdate = datetime.datetime.now()
-    # lno.save()
+    lno.File_process = 2
+    lno.Proc_userid = str(request.user)
+    lno.Proc_sdate = datetime.datetime.now()
+    lno.save()
     chk = Checklist_Master.objects.filter(Checklist_type = lno.Checklist).order_by('View_no')
     return render(request,'BCD.html',{'lno':lno,'chk':chk})
 

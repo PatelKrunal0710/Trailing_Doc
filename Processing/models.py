@@ -2,10 +2,11 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class Fileinfo(models.Model):
-    Upload_Date = models.DateTimeField()
+    Upload_Date = models.DateTimeField()    
+    Sr_No = models.IntegerField()
     Loan_No = models.IntegerField()
+    MM_Loan = models.CharField(max_length=254)
     Borrower_lname = models.CharField(max_length=254)
-    State = models.CharField(max_length=254)
     File_process = models.IntegerField(blank=True, null=True,default=0)
     File_note = models.CharField(max_length=254,blank=True, null=True)
     File_status = models.CharField(max_length=254, blank=True, null=True)
@@ -16,7 +17,10 @@ class Fileinfo(models.Model):
     Qc_userid = models.CharField(max_length=254, blank=True, null=True)
     Qc_sdate = models.DateTimeField(blank=True, null=True)
     Qc_edate = models.DateTimeField(blank=True, null=True)
+    Process_Type = models.CharField(max_length=254)
     Checklist = models.CharField(max_length=254)
+    File_name = models.CharField(max_length=254)
+    Priority = models.IntegerField()
 
     def __str__(self):
         return str(self.Loan_No)
