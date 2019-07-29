@@ -8,13 +8,13 @@
     <tr>
         <th>Loan#</th>
         <th>Borrower Name</th>
-        <th>State</th>
+        <th>Process Type</th>
         <th>Status</th>
-        <!-- <th id="filecomment" style="display: none">Comment</th> -->
+        <th id="filecomment" style="display: none">Comment</th>
     </tr>
     <td>{{lno}}</td>
     <td>{{lno.Borrower_lname}}</td>
-    <td>{{lno.State}}</td>
+    <td>{{lno.Process_Type}}</td>
     <td><select name="fsdd" id="fsdd">
         <option value=""></option>
         <option value="Pass">Pass</option>
@@ -22,10 +22,10 @@
         <option value="Suspend">Suspend</option>
     </select>
 </td>
-    <!-- <td id="filecomment1" style="display: none">
+    <td id="filecomment1" style="display: none">
         <textarea name="fcomment" id="fcomment" cols="30" rows="1"></textarea>
         <input type="button" value="Submit">
-   </td> -->
+   </td>
 </table>
     </div>
 </div>
@@ -63,8 +63,8 @@
             </table>
         </div>
     </div>
-    <label>Suspend Reason</label>
-    <textarea></textarea>
+    <!-- <label>Suspend Reason</label>
+    <textarea></textarea> -->
     <div class="row justify-content-center">
         <button class="btn btn-primary" onclick=mnd()>Submit</button>
 </div>

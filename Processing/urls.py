@@ -7,4 +7,6 @@ urlpatterns = [
     path('Checklist',views.Checklist,name="Checklist"),
     path('Chk_save',views.Chk_save,name="Chk_save"),
     path('faildoc',views.faildoc,name="faildoc"),
+    path('chkmaster',views.chkmaster,name="chkmaster"),
+    path('Dashboard',views.pdashboard,name="Dashboard"),
 ]

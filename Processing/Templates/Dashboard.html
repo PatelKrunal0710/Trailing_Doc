@@ -1,0 +1,27 @@
+{% extends 'blank.html' %}
+{% block body %}
+<div class="container">
+<table class="table table-bordered">
+    <thead class="thead-dark">
+    <div class="row">
+    <tr class="d-flex">
+        <th class="col-2">Today</th>
+        <th class="col-2">New</th>
+    </tr>
+</thead>
+    <tr class="d-flex">
+        <td class="col-2">Total Files</td>
+        <td class="col-2">{{tcount}}</td>
+    </tr>
+    <tr class="d-flex">
+        <td class="col-2">Processing</td>
+        <td class="col-2">{{pcount}}</td>
+    </tr>
+    <tr class="d-flex">
+        <td class="col-2">Qc</td>
+        <td class="col-2">{{qcount}}</td>
+    </tr>
+</table>
+</div>
+</div>
+{% endblock %}
