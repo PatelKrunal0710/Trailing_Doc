@@ -93,7 +93,7 @@ def Chk_save(request):
     elif 'Suspend' in status:
         Fileinfo.objects.filter(Loan_No = loanno).update(File_status = 'Suspend',Proc_edate=datetime.datetime.now())
     else:
-        Fileinfo.objects.filter(Loan_No = loanno).update(File_status = 'Pass',Proc_edate=datetime.datetime.now())
+        Fileinfo.objects.filter(Loan_No = loanno).update(File_status = 'Pass',Proc_edate=datetime.datetime.now(),File_process=1)
     return redirect('Dashboard')
 
 def faildoc(request):

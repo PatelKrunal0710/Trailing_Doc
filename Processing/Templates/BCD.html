@@ -6,13 +6,17 @@
     <div class="table-responsive">
 <table class="table table-bordered">
     <tr>
+        <th>SR#</th>
         <th>Loan#</th>
+        <th>MM Loan#</th>
         <th>Borrower Name</th>
         <th>Process Type</th>
         <th>Status</th>
         <th id="filecomment" style="display: none">Comment</th>
     </tr>
+    <td>{{lno.Sr_No}}</td>
     <td>{{lno}}</td>
+    <td>{{lno.MM_Loan}}</td>
     <td>{{lno.Borrower_lname}}</td>
     <td>{{lno.Process_Type}}</td>
     <td><select name="fsdd" id="fsdd">
