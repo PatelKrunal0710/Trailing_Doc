@@ -1,13 +1,12 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate,login,logout
 from .models import Fileinfo,Checklist_Master,docinfo
-import datetime
-import csv,io
+import csv,io,random,datetime
+from datetime import timedelta
 
 def loginpage(request):
     if request.method=="POST":
         user = authenticate(username = request.POST['name'], password = request.POST['password'])
-        print(user)
         if user is not None:
             ldt = user.last_login
             login(request, user)
@@ -31,7 +30,6 @@ def Logout(request):
 def Fileupload(request):
     if request.method == "POST":
         csv_file = request.FILES['file']
-        print(csv_file)
         data_set = csv_file.read().decode('UTF-8')
         io_string = io.StringIO(data_set)        
         next(io_string)
@@ -51,7 +49,7 @@ def Fileupload(request):
     return render(request, "Fileupload.HTML")
 
 def chkmaster(request):
-    if request.method == "POST":
+    if request.method == "POST":        
         csv_file = request.FILES['file']
         data_set = csv_file.read().decode('UTF-8')
         io_string = io.StringIO(data_set)        
@@ -72,29 +70,30 @@ def Checklist(request):
     lno.Proc_sdate = datetime.datetime.now()
     lno.save()
     chk = Checklist_Master.objects.filter(Checklist_type = lno.Checklist).order_by('View_no')
-    print(chk)
     return render(request,'BCD.html',{'lno':lno,'chk':chk})
 
 def Chk_save(request):
-    d = dict(request.POST)
-    fid = int(request.POST["fileid"])
-    loanno = int(request.POST["loan_no"])
-    bname = request.POST["Bname"]
-    state = request.POST["State"]
-    sr = d['Sr']
-    chklist = d['list']
-    status = d['ddstatus']
-    cmnt = d['comment']
-    for (a,b,c,d) in zip(sr,chklist,status,cmnt):
-        d = docinfo.objects.create(Tdfileid=fid,Loan_no= loanno, Borrower_lname = bname,State=state,View_no=int(a),Checklist=b,Proc_status=c,Proc_comments=d)
-        d.save()
-    if 'Fail' in status:
-        Fileinfo.objects.filter(Loan_No = loanno).update(File_status = 'Fail',Proc_edate=datetime.datetime.now())
-    elif 'Suspend' in status:
-        Fileinfo.objects.filter(Loan_No = loanno).update(File_status = 'Suspend',Proc_edate=datetime.datetime.now())
-    else:
-        Fileinfo.objects.filter(Loan_No = loanno).update(File_status = 'Pass',Proc_edate=datetime.datetime.now(),File_process=1)
-    return redirect('Dashboard')
+    loan = authenticate(Loan_no = request.POST["loan_no"])
+    if loan is None:
+        d = dict(request.POST)
+        fid = int(request.POST["fileid"])
+        loanno = int(request.POST["loan_no"])
+        bname = request.POST["Bname"]
+        state = request.POST["State"]
+        sr = d['Sr']
+        chklist = d['list']
+        status = d['ddstatus']
+        cmnt = d['comment']
+        for (a,b,c,d) in zip(sr,chklist,status,cmnt):
+            d = docinfo.objects.create(Tdfileid=fid,Loan_no= loanno, Borrower_lname = bname,State=state,View_no=int(a),Checklist=b,Proc_status=c,Proc_comments=d)
+            d.save()
+        if 'Fail' in status:
+            Fileinfo.objects.filter(Loan_No = loanno).update(File_status = 'Fail',Proc_edate=datetime.datetime.now(),File_process=1)
+        elif 'Suspend' in status:
+            Fileinfo.objects.filter(Loan_No = loanno).update(File_status = 'Suspend',Proc_edate=datetime.datetime.now(),File_process=1)
+        else:
+            Fileinfo.objects.filter(Loan_No = loanno).update(File_status = 'Pass',Proc_edate=datetime.datetime.now(),File_process=1)
+        return redirect('Dashboard')
 
 def faildoc(request):
     fdr = docinfo.objects.filter(Proc_status="Fail").order_by("Loan_no")
@@ -107,3 +106,25 @@ def pdashboard(request):
     pcount = Fileinfo.objects.filter(File_process=1,Proc_edate__date=datetime.date.today(),Proc_userid=request.user).count()
     qcount = Fileinfo.objects.filter(File_process=1,Qc_edate__date=datetime.date.today(),Qc_userid=request.user).count()
     return render(request, 'Dashboard.html',{'tcount':tcount,'pcount':pcount,'qcount':qcount})
+
+def Qc(request):
+    rqc = Fileinfo.objects.filter(File_process=1,Proc_edate__date=datetime.date.today())
+    print(rqc.count())
+    q = random.choice(rqc)
+    print(q,q.id,q.Proc_userid)
+    qcdoc = docinfo.objects.filter(Tdfileid=q.id).order_by("id")
+    return render(request,'QC.html',{'qcdoc':qcdoc,'q':q})
+
+def qcChk_save(request):
+    d = dict(request.POST)
+    fid = int(request.POST["fileid"])
+    loanno = int(request.POST["loan_no"])
+    bname = request.POST["Bname"]
+    print(fid,loanno,bname)
+    sr = d['Sr']
+    chklist = d['list']
+    status = d['ddstatus']
+    cmnt = d['comment']
+    for (a,b,c,d) in zip(sr,chklist,status,cmnt):
+        pass
+    return redirect('Dashboard')

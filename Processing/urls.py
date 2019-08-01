@@ -9,4 +9,6 @@ urlpatterns = [
     path('faildoc',views.faildoc,name="faildoc"),
     path('chkmaster',views.chkmaster,name="chkmaster"),
     path('Dashboard',views.pdashboard,name="Dashboard"),
+    path('Qc',views.Qc,name="Qc"),
+    path('qcChk_save',views.qcChk_save,name="qcChk_save"),
 ]

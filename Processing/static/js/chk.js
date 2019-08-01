@@ -27,3 +27,18 @@ function mnd(){
 }
 }
 
+function h(){
+var Table = document.getElementById("table")
+for(var i=1; i<Table.rows.length; i++){
+    var h = document.getElementById("ddstatus_"+i).value  
+    if (h =="Fail"){
+        document.getElementById("ddstatus_"+i).style.backgroundColor='red'
+    }else if(h=="Pass"){
+        document.getElementById("ddstatus_"+i).style.backgroundColor="green"
+    }else{
+        document.getElementById("ddstatus_"+i).style.backgroundColor="white"
+    }
+    }    
+}
+
+

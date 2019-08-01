@@ -1,6 +1,7 @@
 {% extends 'blank.html' %}
 {% block body %}
 {% load static %}
+<script src="{% static 'js/chk.js' %}"></script>
 <link href="{% static 'vendor/datatables/dataTables.bootstrap4.css' %}" rel="stylesheet">
 <div class="card-body"></div>
     <div class="table-responsive">
@@ -53,7 +54,7 @@
                     <td>{{i.View_no}}<input type="hidden" name="Sr" value="{{i.View_no}}"></td>
                     <td>{{i}}<input type="hidden" name = "list" value="{{i}}"></td>
                     <td>
-                        <select name="ddstatus" id="ddstatus_{{i.View_no}}" required>
+                        <select name="ddstatus" id="ddstatus_{{i.View_no}}" required onchange="h()">
                             <option value=""></option>
                             <option value="Pass">Pass</option>
                             <option value="Fail">Fail</option>
@@ -73,5 +74,5 @@
         <button class="btn btn-primary" onclick=mnd()>Submit</button>
 </div>
 </form>
-<script src="{% static 'js/chk.js' %}"></script>
+
 {% endblock %}
