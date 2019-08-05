@@ -1,6 +1,7 @@
 var fstatus = document.getElementById("fsdd")
 fstatus.onchange = function(){
     var db = document.getElementById("fsdd").value
+    console.log(db);    
     if(db=="Suspend"){
         document.getElementById("filecomment").style.display = 'block'
         document.getElementById("filecomment1").style.display = 'block'

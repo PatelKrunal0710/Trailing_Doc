@@ -1,20 +1,20 @@
 {% extends 'blank.html' %}
 {% block body %}
 {% load static %}
-<script src="{% static 'js/chk.js' %}"></script>
 <link href="{% static 'vendor/datatables/dataTables.bootstrap4.css' %}" rel="stylesheet">
 <div class="card-body"></div>
     <div class="table-responsive">
 <table class="table table-bordered">
-    <tr>
-        <th>SR#</th>
-        <th>Loan#</th>
-        <th>MM Loan#</th>
-        <th>Borrower Name</th>
-        <th>Process Type</th>
-        <th>Status</th>
-        <th id="filecomment" style="display: none">Comment</th>
+    <tr style="background-color: #fa4251">
+        <th style="color: whitesmoke">SR#</th>
+        <th style="color: whitesmoke">Loan#</th>
+        <th style="color: whitesmoke">MM Loan#</th>
+        <th style="color: whitesmoke">Borrower Name</th>
+        <th style="color: whitesmoke">Process Type</th>
+        <th style="color: whitesmoke">Status</th>
+        <th id="filecomment" style="display: none; color: whitesmoke">Comment</th>
     </tr>
+    <tr>
     <td>{{lno.Sr_No}}</td>
     <td>{{lno}}</td>
     <td>{{lno.MM_Loan}}</td>
@@ -31,6 +31,7 @@
         <textarea name="fcomment" id="fcomment" cols="30" rows="1"></textarea>
         <input type="button" value="Submit">
    </td>
+</tr>
 </table>
     </div>
 </div>
@@ -42,12 +43,12 @@
     <input type="hidden" name = "State" value="{{lno.State}}">
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table table-bordered" name="table" id="table">
-                <tr>
-                    <th>Sr#</th>
-                    <th>Audit Items</th>
-                    <th>Status</th>
-                    <th>Comments</th>
+            <table class="table table-bordered table-striped" name="table" id="table">
+                <tr style="background-color: #002933">
+                    <th style="color: #fff">SR#</th>
+                    <th style="color: #fff">Audit Items</th>
+                    <th style="color: #fff">Status</th>
+                    <th style="color: #fff">Comments</th>
                 </tr>
                 {% for i in chk %}
                 <tr>
@@ -74,5 +75,5 @@
         <button class="btn btn-primary" onclick=mnd()>Submit</button>
 </div>
 </form>
-
+<script src="{% static 'js/chk.js' %}"></script>
 {% endblock %}

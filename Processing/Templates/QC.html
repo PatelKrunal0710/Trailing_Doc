@@ -3,13 +3,13 @@
 {% block body %}
 <script src="{% static 'js/chk.js' %}"></script>
 <table class="table table-bordered">
-    <tr>
-        <th>SR#</th>
-        <th>Loan#</th>
-        <th>MM Loan#</th>
-        <th>Borrower Name</th>
-        <th>Process Type</th>
-        <th>Status</th>
+    <tr style="background-color: #fa4251">
+        <th style="color: #fff">SR#</th>
+        <th style="color: #fff">Loan#</th>
+        <th style="color: #fff">MM Loan#</th>
+        <th style="color: #fff">Borrower Name</th>
+        <th style="color: #fff">Process Type</th>
+        <th style="color: #fff">Status</th>
     </tr>
     <tr>
         <td>{{q.Sr_No}}</td>
@@ -27,11 +27,11 @@
     <input type="hidden" name="Bname" value="{{q.Borrower_lname}}">
     <input type="hidden" name="State" value="{{q.State}}">
     <table class="table table-bordered" name="table" id="table">
-        <tr>
-            <th>Sr#</th>
-            <th>Audit Items</th>
-            <th>Status</th>
-            <th>Comments</th>
+        <tr style="background-color: #002933">
+            <th style="color: #fff">SR#</th>
+            <th style="color: #fff">Audit Items</th>
+            <th style="color: #fff">Status</th>
+            <th style="color: #fff">Comments</th>
         </tr>
         {% for i in qcdoc %}
         <tr>

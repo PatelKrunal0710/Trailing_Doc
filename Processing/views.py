@@ -65,7 +65,7 @@ def chkmaster(request):
 
 def Checklist(request):
     lno = Fileinfo.objects.filter(File_process=0).order_by('-Priority').first()
-    lno.File_process = 2
+    lno.File_process = 0
     lno.Proc_userid = str(request.user)
     lno.Proc_sdate = datetime.datetime.now()
     lno.save()
