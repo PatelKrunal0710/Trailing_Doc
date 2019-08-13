@@ -45,7 +45,7 @@ def Fileupload(request):
                 File_name = csv_file,
                 Priority = column[6],
             )
-        return render(request, "Fileupload.HTML")
+        return render(request, "Fileupload.HTML",{"smesg":"File has been uploaded successfully."})
     return render(request, "Fileupload.HTML")
 
 def chkmaster(request):
@@ -64,28 +64,34 @@ def chkmaster(request):
     return render(request, "chkmsterupload.HTML")
 
 def Checklist(request):
-    lno = Fileinfo.objects.filter(File_process=0).order_by('-Priority').first()
-    lno.File_process = 0
-    lno.Proc_userid = str(request.user)
-    lno.Proc_sdate = datetime.datetime.now()
-    lno.save()
+    lno = Fileinfo.objects.get(File_process=2,Proc_userid=request.user)          
+    if not lno:
+        print(lno,"inside if condition")
+        lno = Fileinfo.objects.filter(File_process=0).order_by('-Priority').first()    
+        lno.File_process = 2
+        lno.Proc_userid = str(request.user)
+        lno.Proc_sdate = datetime.datetime.now()
+        lno.save()    
     chk = Checklist_Master.objects.filter(Checklist_type = lno.Checklist).order_by('View_no')
     return render(request,'BCD.html',{'lno':lno,'chk':chk})
 
 def Chk_save(request):
-    loan = authenticate(Loan_no = request.POST["loan_no"])
-    if loan is None:
+    loan = docinfo.objects.filter(Loan_no = request.POST["loan_no"])
+    print(loan)
+    if not loan:
         d = dict(request.POST)
         fid = int(request.POST["fileid"])
         loanno = int(request.POST["loan_no"])
         bname = request.POST["Bname"]
         state = request.POST["State"]
+        Sr_No = request.POST['Sr#']
+        Filename =request.POST['File_name']
         sr = d['Sr']
         chklist = d['list']
         status = d['ddstatus']
         cmnt = d['comment']
         for (a,b,c,d) in zip(sr,chklist,status,cmnt):
-            d = docinfo.objects.create(Tdfileid=fid,Loan_no= loanno, Borrower_lname = bname,State=state,View_no=int(a),Checklist=b,Proc_status=c,Proc_comments=d)
+            d = docinfo.objects.create(Tdfileid=fid,Loan_no= loanno, Borrower_lname = bname,State=state,View_no=int(a),Checklist=b,Proc_status=c,Proc_comments=d,Sr_No = Sr_No,File_name=Filename)
             d.save()
         if 'Fail' in status:
             Fileinfo.objects.filter(Loan_No = loanno).update(File_status = 'Fail',Proc_edate=datetime.datetime.now(),File_process=1)
@@ -93,28 +99,50 @@ def Chk_save(request):
             Fileinfo.objects.filter(Loan_No = loanno).update(File_status = 'Suspend',Proc_edate=datetime.datetime.now(),File_process=1)
         else:
             Fileinfo.objects.filter(Loan_No = loanno).update(File_status = 'Pass',Proc_edate=datetime.datetime.now(),File_process=1)
+        if request.user.userprofile.Sample_QC == 100:
+            Fileinfo.objects.filter(Loan_No = loanno).update(Qc_process=0)
+        else:
+            completed_loans = Fileinfo.objects.filter(File_process=1,Proc_edate__date=datetime.date.today(),Proc_userid=request.user)
+            print(completed_loans, completed_loans.count())
+            prcent = completed_loans.count()*request.user.userprofile.Sample_QC/100
+            if prcent % 1 == 0:
+                rendomloans = Fileinfo.objects.filter(File_process=1,Proc_edate__date=datetime.date.today(),Proc_userid=request.user).exclude(Qc_process=0)
+                if request.user.userprofile.Sample_QC == 15:                    
+                    sqc = random.choices(rendomloans, k=3)                                        
+                    for i in sqc:
+                        Fileinfo.objects.filter(Loan_No = str(i)).update(Qc_process=0)
+                else:
+                    sqc = random.choice(rendomloans)        
+                    Fileinfo.objects.filter(Loan_No = str(sqc)).update(Qc_process=0)
+        return redirect('Dashboard')
+    else:
         return redirect('Dashboard')
 
 def faildoc(request):
-    fdr = docinfo.objects.filter(Proc_status="Fail").order_by("Loan_no")
-    pfdr = Fileinfo.objects.filter(File_status="Pass")
-    sfdr = Fileinfo.objects.filter(File_status="Suspend")
-    return render(request,'report.html',{'fdr':fdr,'pfdr':pfdr,'sfdr':sfdr})
+    filename =Fileinfo.objects.values('File_name').distinct()
+    fdr = docinfo.objects.filter(Proc_status="Fail").order_by("id")
+    pfdr = Fileinfo.objects.filter(File_status="Pass").order_by("Sr_No")
+    sfdr = Fileinfo.objects.filter(File_status="Suspend").order_by("Sr_No")
+    return render(request,'report.html',{'fdr':fdr,'pfdr':pfdr,'sfdr':sfdr,'filename':filename})
 
-def pdashboard(request):
+def pdashboard(request):    
     tcount = Fileinfo.objects.filter(File_process=0).count()
+    tqcount = Fileinfo.objects.filter(Qc_process=0).count()
     pcount = Fileinfo.objects.filter(File_process=1,Proc_edate__date=datetime.date.today(),Proc_userid=request.user).count()
     qcount = Fileinfo.objects.filter(File_process=1,Qc_edate__date=datetime.date.today(),Qc_userid=request.user).count()
-    return render(request, 'Dashboard.html',{'tcount':tcount,'pcount':pcount,'qcount':qcount})
+    return render(request, 'Dashboard.html',{'tcount':tcount,'tqcount':tqcount,'pcount':pcount,'qcount':qcount})
 
 def Qc(request):
-    rqc = Fileinfo.objects.filter(File_process=1,Proc_edate__date=datetime.date.today())
-    print(rqc.count())
-    q = random.choice(rqc)
-    print(q,q.id,q.Proc_userid)
+    q = Fileinfo.objects.filter(Qc_process=0).order_by('Proc_edate').exclude(Proc_userid=request.user).first()
+    if not q:
+        return redirect("404.html")
+    q.Qc_process=2
+    q.Qc_userid = str(request.user)
+    q.Qc_sdate = datetime.datetime.now()
+    q.save()
     qcdoc = docinfo.objects.filter(Tdfileid=q.id).order_by("id")
     return render(request,'QC.html',{'qcdoc':qcdoc,'q':q})
-
+    
 def qcChk_save(request):
     d = dict(request.POST)
     fid = int(request.POST["fileid"])
@@ -126,5 +154,11 @@ def qcChk_save(request):
     status = d['ddstatus']
     cmnt = d['comment']
     for (a,b,c,d) in zip(sr,chklist,status,cmnt):
-        pass
+        d = docinfo.objects.filter(Tdfileid=fid).update(Qc_status=c,Proc_comments=d)
+        if 'Fail' in status:
+            Fileinfo.objects.filter(Loan_No = loanno).update(File_status = 'Fail',Qc_edate=datetime.datetime.now(),Qc_process=1)
+        elif 'Suspend' in status:
+            Fileinfo.objects.filter(Loan_No = loanno).update(File_status = 'Suspend',Qc_edate=datetime.datetime.now(),Qc_process=1)
+        else:
+            Fileinfo.objects.filter(Loan_No = loanno).update(File_status = 'Pass',Qc_edate=datetime.datetime.now(),Qc_process=1)
     return redirect('Dashboard')

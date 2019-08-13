@@ -35,6 +35,7 @@ class Checklist_Master(models.Model):
 
 class docinfo(models.Model):
     Tdfileid = models.IntegerField(null=True)
+    Sr_No = models.IntegerField()
     Loan_no = models.IntegerField(null=True)
     Borrower_lname = models.CharField(max_length=254,null=True)
     State = models.CharField(max_length=254,null=True)
@@ -45,6 +46,7 @@ class docinfo(models.Model):
     Qc_status = models.CharField(max_length=254,null=True)
     Qc_comments = models.CharField(max_length=254,null=True)
     Checklist_type = models.CharField(max_length=254,null=True)
+    File_name = models.CharField(max_length=254)
 
     def __str__(self):
         return str(self.Tdfileid)

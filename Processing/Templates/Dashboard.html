@@ -14,14 +14,19 @@
         <td class="col-2"><a href= "{% url 'Checklist' %}">{{tcount}}</a></td>
     </tr>
     <tr class="d-flex">
+        <td class="col-2">Total QC Files</td>
+        <td class="col-2"><a href= "{% url 'Qc' %}">{{tqcount}}</a></td>
+    </tr>
+    <tr class="d-flex">
         <td class="col-2">Processing</td>
         <td class="col-2">{{pcount}}</td>
     </tr>
     <tr class="d-flex">
         <td class="col-2">Qc</td>
-        <td class="col-2"><a href= "{% url 'Qc' %}">{{qcount}}</a></td>
+        <td class="col-2">{{qcount}}</td>
     </tr>
 </table>
 </div>
 </div>
+{{No_File}}
 {% endblock %}

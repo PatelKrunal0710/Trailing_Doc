@@ -41,5 +41,3 @@ for(var i=1; i<Table.rows.length; i++){
     }
     }    
 }
-
-

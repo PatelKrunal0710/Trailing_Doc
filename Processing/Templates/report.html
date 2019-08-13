@@ -1,42 +1,60 @@
 {% extends 'blank.html' %}
 {% block body %}
-<table class="table table-bordered">
-    <tr>
+<form action="{% url 'faildoc'%}" method="POST">
+<select name="Filename" id="Filename">    
+    {% for i in filename %}
+    <option value="">{{i.File_name}}</option>    
+    {% endfor %}
+</select>
+
+<input type="text" name="Filename1" id="Filename1">
+<button>Submit</button>
+</form>
+<table class="table table-bordered table-striped">
+    <tr style="background-color: darkorange">
+        <th>Sr#</th>
         <th>Loan#</th>
         <th>File name</th>
         <th>Line#</th>
         <th>Audit Items</th>
         <th>Comments</th>
         <th>Status</th>
+        <th>File Name</th>
     </tr>
     {% for i in fdr %}
     <tr>
+        <td>{{i.Sr_No}}</td>
         <td>{{i.Loan_no}}</td>
         <td>{{i.Borrower_lname}}</td>
         <td>{{i.View_no}}</td>
         <td>{{i.Checklist}}</td>
         <td>{{i.Proc_comments}}</td>
         <td>{{i.Proc_status}}</td>
+        <td>{{i.File_name}}</td>
     </tr>
     {% endfor %}
     {% for j in pfdr %}
     <tr>
+        <td>{{j.Sr_No}}</td>
         <td>{{j.Loan_No}}</td>
         <td>{{j.Borrower_lname}}</td>
         <td>0</td>
         <td>None</td>
         <td>None</td>        
         <td>{{j.File_status}}</td>
+        <td>{{j.File_name}}</td>
     </tr>
     {% endfor %}
     {% for k in sfdr %}
     <tr>
+        <td>{{k.Sr_No}}</td>
         <td>{{k.Loan_No}}</td>
         <td>{{k.Borrower_lname}}</td>
         <td>-</td>
         <td>-</td>               
         <td>{{j.File_status}}</td>
         <td>{{k.File_note}}</td> 
+        <td>{{k.File_name}}</td>
     </tr>
     {% endfor %}
 </table>
