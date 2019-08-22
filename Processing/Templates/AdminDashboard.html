@@ -1,0 +1,39 @@
+{% extends 'blank.html' %}
+{% block body %}
+
+<div class="row">
+<div class="col">
+<table class="table table-bordered table-sm table-responsive">
+    <tr class="small" style="background-color:orange;"><td colspan="6"><h6><center><b>Production - MTD Report - LD Trailing Docs - DOT/E-recorded</b></center></h6></td></tr>
+    <tr class="small">    
+        <th>No.</th>
+        <th>Name</th>
+        <th>File Count</th>
+        <th>Productivity</th>
+        <th>Eror Count File</th>
+        <th>QC Score</th>
+    </tr>    
+    {% for i in fcount %}
+    <tr class="small">
+        <td>{{forloop.counter}}</td>
+        <td>{{i.Proc_userid}}</td>
+        <td>{{i.filecount}}</td>      
+    </tr>
+    {% endfor %}
+</table>
+</div>
+<div class="col">
+<table class="table table-bordered table-sm table-responsive">
+        <tr style="background-color:orange;"><td colspan="6"><h6><center><b>Production - MTD Report - LD Trailing Docs - TITLE</b></center></h6></td></tr>
+<tr class="small">
+    <th>No.</th>
+    <th>Name</th>
+    <th>File Count</th>
+    <th>Productivity</th>
+    <th>Eror Count File</th>
+    <th>QC Score</th>
+</tr>
+</table>
+</div>
+</div>
+{% endblock %}
