@@ -1,13 +1,14 @@
 {% extends 'blank.html' %}
 {% block body %}
 <form action="{% url 'faildoc'%}" method="POST">
-<select name="Filename" id="Filename">    
+    {% csrf_token %}
+<select name="Filename" id="Filename" onchange="t1()">    
     {% for i in filename %}
     <option value="">{{i.File_name}}</option>    
     {% endfor %}
 </select>
 
-<input type="text" name="Filename1" id="Filename1">
+<input type="hidden" name="Filename1" id="Filename1">
 <button>Submit</button>
 </form>
 <table class="table table-bordered table-striped">
@@ -58,4 +59,11 @@
     </tr>
     {% endfor %}
 </table>
+<script>
+    function t1(){
+var fn = document.getElementById('Filename')
+var fn1 = fn.options[fn.selectedIndex].text;
+document.getElementById('Filename1').value=fn1
+}
+</script>
 {% endblock %}

@@ -25,7 +25,7 @@ SECRET_KEY = '@v^mr775qv8vjfky=&()nuw!xqrjofsjf$!*j6aup^5tfb_d-)'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['172.16.8.218','127.0.0.1']
+ALLOWED_HOSTS = ['172.16.8.248','127.0.0.1']
 
 
 # Application definition
@@ -80,7 +80,7 @@ DATABASES = {
         'NAME': 'Trailing_Doc',
         'USER': 'postgres',
         'PASSWORD': 'Admin@123',
-        'HOST': '172.16.8.222',
+        'HOST': '172.16.8.247',
         'PORT':'5432',
     }
 }

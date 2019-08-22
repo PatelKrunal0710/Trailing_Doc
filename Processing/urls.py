@@ -11,4 +11,5 @@ urlpatterns = [
     path('Dashboard',views.pdashboard,name="Dashboard"),
     path('Qc',views.Qc,name="Qc"),
     path('qcChk_save',views.qcChk_save,name="qcChk_save"),
+    path('AdminDashboard',views.AdminDashboard,name="AdminDashboard"),
 ]

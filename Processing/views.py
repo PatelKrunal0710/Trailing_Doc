@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate,login,logout
 from .models import Fileinfo,Checklist_Master,docinfo
 import csv,io,random,datetime
 from datetime import timedelta
+from django.db.models import Count,Q
 
 def loginpage(request):
     if request.method=="POST":
@@ -123,6 +124,11 @@ def faildoc(request):
     fdr = docinfo.objects.filter(Proc_status="Fail").order_by("id")
     pfdr = Fileinfo.objects.filter(File_status="Pass").order_by("Sr_No")
     sfdr = Fileinfo.objects.filter(File_status="Suspend").order_by("Sr_No")
+    if request.method == "POST":
+        filename =Fileinfo.objects.values('File_name').distinct()
+        fdr = docinfo.objects.filter(Proc_status="Fail",File_name=request.POST['Filename1']).order_by("id")
+        pfdr = Fileinfo.objects.filter(File_status="Pass",File_name=request.POST['Filename1']).order_by("Sr_No")
+        sfdr = Fileinfo.objects.filter(File_status="Suspend",File_name=request.POST['Filename1']).order_by("Sr_No")
     return render(request,'report.html',{'fdr':fdr,'pfdr':pfdr,'sfdr':sfdr,'filename':filename})
 
 def pdashboard(request):    
@@ -162,3 +168,7 @@ def qcChk_save(request):
         else:
             Fileinfo.objects.filter(Loan_No = loanno).update(File_status = 'Pass',Qc_edate=datetime.datetime.now(),Qc_process=1)
     return redirect('Dashboard')
+
+def AdminDashboard(request):
+    fcount = Fileinfo.objects.filter(Proc_edate__month =datetime.datetime.now().month).values('Proc_userid').annotate(filecount=Count('Proc_userid',filter=Q(File_process=1,)))
+    return render(request,'AdminDashboard.html',{"fcount":fcount})
